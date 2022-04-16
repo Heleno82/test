@@ -1,0 +1,213 @@
+
+<!DOCTYPE HTML> 
+<html lang="pt-br"> <!-- <html lang="pt-br" manifest="example.appcache"> -->
+	<head>  
+		                       
+		<title>Fachada Limpa</title>  
+		<meta name="theme-color" content="#db5945"> 
+		<meta charset="utf-8">  
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.5, minimum-scale=1, user-scalable=yes" /> 
+		<link type="image/icon" rel="shortcut icon" href="favicon.ico" />  
+		<!-- <link type="text/css" rel="stylesheet" href="css/style.css" /> -->
+		<style type="text/css">
+
+html{
+	/*background: #1a081f;*/ 
+}
+	body{ 
+		margin: 0 auto;
+		width: calc(100% - 0px);  
+		height: 100%;
+		padding: 0;
+		float: left; 
+		color:#fff; 
+		font-size: 18px;
+		font-family: gotham, arial, helvetica, sans-serif;
+		overflow-x: hidden;
+		background: #000;  
+	}    
+
+	/* video{
+		width: 333px;
+		float: left;
+	} */
+		</style>
+	</head>
+	<body>    
+
+<script type="text/javascript"> 
+
+</script>
+		
+
+
+<script type="text/javascript">    
+
+
+// clsDTo = controles do tocador 
+function clsDTo() {   
+
+	var ctrdtos = document.querySelectorAll('[ctrdto]'); // ctrdto = controles do tocador
+	for (var i = 0; i < ctrdtos.length; i++) { 
+
+		var ctrdto = ctrdtos[i];    
+		ctrdto.onclick = function(e) {  
+			controlesDoTocador(this);
+		};
+
+		var cmp = pAntePorAtr(ctrdto,'[cmp]',1000) || _s.parentElement;
+		var range = cmp.querySelector('input[type=range]');
+		range.value = 0;
+
+		function controlesDoTocador(_s) { 
+
+			var cmp = pAntePorAtr(_s,'[cmp]',1000) || _s.parentElement;
+			var audio = cmp.querySelector("audio") || cmp.querySelector("video");  
+			var ctrdto = _s.getAttribute('ctrdto');  
+			if (!audio) return;
+			var src = audio.getAttribute("src");  
+
+			if (ctrdto == 'export') {   
+
+				peMzVREAso(MONG.files,function(aeq) { // percorre matriz via rercursao e atraso 
+
+					var p = aeq.path; 
+					var arquivo_e_extensao = p.pega_arquivo_e_extensao();   
+					mydb.leEEsc({p:p,destino:"D:\\Celular\\"+arquivo_e_extensao,},function(r) {});  
+					proDeTPorMEIt(MONG.files.length,function(progrecao) { // progrecao de tarefa por matriz e iteracao
+						
+					},function(fim) {
+						console.log(fim);
+					});   
+
+				},500);
+			}; 
+
+			if (ctrdto == 'play') {
+				audio.play(); // This will play the music.
+			};
+
+			if (ctrdto == 'pause') {
+				if (window._pause === undefined || window._pause === false) {
+					audio.pause(); 
+					window._pause = true;
+				} else {
+					audio.play();
+					window._pause = false;
+				};
+			};
+			if (ctrdto == 'loop') {
+				audio.loop(); // This will stop the music.
+			}  
+			if (ctrdto == 'muted') {
+				if (audio.muted == false) {
+					audio.muted = true; 
+				} else {
+					audio.muted = false; 
+				};
+			}
+			if (ctrdto == 'regress') {
+				audio.currentTime = audio.currentTime-5; 
+			} 
+			if (ctrdto == 'advance') {
+				audio.currentTime = audio.currentTime+5; 
+			};
+			
+			var range = cmp.querySelector('input[type=range]');
+			if (range) {
+				range.max = audio.duration;
+				audio.addEventListener('canplay',function() { 
+				},false);
+
+				audio.ontimeupdate = function() { 
+					range.value = this.currentTime;  
+					document.querySelector("thimme").innerHTML = secToStr(this.currentTime); 
+					document.querySelector("dhuration").innerHTML = secToStr(this.duration); 
+				};
+			};
+			
+			audio.onended = function() {
+
+				var cmp = pAntePorAtr(_s,'[cmp]',1000) || _s.parentElement; 
+				// cmp.querySelector('input[type=range]').value = 0; 
+
+				var cmp_ = pIPorAl(cmp); // pega irmao por aproximacao
+				
+				if (!cmp_) {
+					
+					cmp_ = document.querySelectorAll("[cmp]")[0];
+					audio = cmp_.querySelector("audio") || cmp.querySelector("video");
+					audio.play();  
+					controlesDoTocador(audio);
+
+				} else {
+
+					var range = cmp_.querySelector('input[type=range]');
+					range.max = audio.duration;
+					range.value = 0;
+					audio = cmp_.querySelector("audio") || cmp.querySelector("video");
+					//audio.currentTime = 0;
+					audio.play();  
+					controlesDoTocador(audio);
+				};
+			};  
+		}
+	}; 
+};
+/* var test = document.createElement("div");
+// test.setAttribute("",); // All Around The World.mp4 // ../files/Cigarettes & Alcohol.mp3
+test.innerHTML = `<div cmp=pedro>
+	<audio controls>
+		<source src="../files/All Around The World.mp4" type="audio/ogg">
+		<source src="../files/All Around The World.mp4" type="audio/mpeg">
+		Your browser does not support the audio tag.
+	</audio>
+	<span ctrdto=play> play </span>
+	<input type=range />
+	<thimme> 00:00:00 </thimme> / <dhuration> 00:00:00 </dhuration>
+</div>`;
+test.innerHTML = `<div cmp=pedro>
+	<video controls>
+		<source src="../files/All Around The World.mp4" type="video/mp4">
+		<source src="../files/All Around The World.mp4" type="video/ogg">
+		Your browser does not support the video tag.
+	</video>
+	<span ctrdto=play> play </span>
+	<input type=range />
+	<thimme> 00:00:00 </thimme> / <dhuration> 00:00:00 </dhuration>
+</div>`;
+document.body.insertBefore(test,document.body.childNodes[0]);
+
+clsDTo(); // clsDTo = controles do tocador  */
+
+
+
+
+
+
+
+/* if (!navigator.getUserMedia)
+	navigator.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+if (!navigator.cancelAnimationFrame)
+	navigator.cancelAnimationFrame = navigator.webkitCancelAnimationFrame || navigator.mozCancelAnimationFrame;
+if (!navigator.requestAnimationFrame)
+	navigator.requestAnimationFrame = navigator.webkitRequestAnimationFrame || navigator.mozRequestAnimationFrame; */
+
+var div = document.createElement("div");  
+div.innerHTML = `<video></video>`;
+document.body.insertBefore(div,document.body.childNodes[0]);
+
+var constraints = { audio: false, video: { width: (1280/2), height: (720/2) } };
+navigator.mediaDevices.getUserMedia(constraints).then(function(mediaStream) {
+	var video = document.querySelector('video');
+	video.srcObject = mediaStream;
+	video.onloadedmetadata = function(e) {
+		video.play();
+	};
+}).catch(function(err) { 
+	console.log(err.name + ": " + err.message); 
+}); 
+
+</script>   
+	</body>
+</html> 
